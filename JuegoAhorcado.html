@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Ahorcado</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #contenedor {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 15px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        #listaRanking {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #listaRanking li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            background-color: #eee;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        #botonesRanking {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        canvas {
+            border: 1px solid #000;
+          }
+        
+    </style>
+</head>
+<body>
+    <canvas id="hangmanCanvas" width="400" height="400"></canvas>
+    <div id="contenedor">
+        <div id="inicio">
+            <h1>Bienvenido al Juego de Ahorcado</h1>
+            <button onclick="iniciarJuego()">Jugar</button>
+            <button onclick="mostrarRanking()">Ver Ranking</button>
+        </div>
+
+        <div id="juego" style="display: none;">
+            <h2 id="palabra"></h2>
+            <p id="intentos"></p>
+            <input type="text" id="letraInput" maxlength="1" oninput="adivinarLetra()">
+            <button onclick="terminarJuego()">Terminar Juego</button>
+        </div>
+
+        <div id="ranking" style="display: none;">
+            <h2>Ranking de Tiempos</h2>
+            <ul id="listaRanking"></ul>
+            <div id="botonesRanking">
+                <button onclick="limpiarRanking()">Limpiar Ranking</button>
+                <button onclick="volverInicio()">Volver al Inicio</button>
+            </div>
+        </div>
+
+        <div id="juego" style="display: none;">
+            <div id="muñeco"></div>
+            <h2 id="palabra"></h2>
+            <p id="intentos"></p>
+            <input type="text" id="letraInput" maxlength="1" oninput="adivinarLetra()">
+            <button onclick="terminarJuego()">Terminar Juego</button>
+        </div>
+    </div>
+
+    <script>
+      
+        const canvas = document.getElementById('hangmanCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let intentosMaximos = 6; // Establecer el límite de intentos
+
+        function dibujarAhorcado() {
+            // Dibuja el ahorcado según el número de intentos
+            // Puedes personalizar el diseño según tus preferencias
+            // Aquí se presenta un diseño básico
+            ctx.beginPath();
+            if (intentosMaximos >= 1) {
+              ctx.arc(50, 50, 20, 0, Math.PI * 2); // Cabeza
+            }
+            if (intentos >= 2) {
+              ctx.moveTo(50, 70);
+              ctx.lineTo(50, 150); // Cuerpo
+            }
+            if (intentos >= 3) {
+              ctx.moveTo(30, 90);
+              ctx.lineTo(50, 70); // Brazo izquierdo
+            }
+            if (intentos >= 4) {
+              ctx.moveTo(70, 90);
+              ctx.lineTo(50, 70); // Brazo derecho
+            }
+            if (intentos >= 5) {
+              ctx.moveTo(50, 150);
+              ctx.lineTo(60, 200); // Pierna derecha
+            }
+            if (intentos >= 6) {
+              ctx.moveTo(50, 150);
+              ctx.lineTo(40, 200); // Pierna izquierda
+            }
+            ctx.stroke();
+
+            if (intentos >= intentosMaximos) {
+                terminarJuego();
+              }
+          }
+      
+        function borrarAhorcado() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function limpiarRanking() {
+            localStorage.removeItem('ranking');
+            mostrarRanking();
+        }
+
+        function adivinarLetra() {
+            const letraInput = document.getElementById('letraInput');
+            const letra = letraInput.value.toLowerCase();
+
+            if (!letra.match(/[a-z]/)) {
+                alert('Ingresa una letra válida.');
+                return;
+            }
+
+            if (palabraSecreta.includes(letra)) {
+                for (let i = 0; i < palabraSecreta.length; i++) {
+                    if (palabraSecreta[i] === letra) {
+                        palabraAdivinada[i] = letra;
+                    }
+                }
+
+                if (!palabraAdivinada.includes('_')) {
+                    finTiempo = new Date().getTime();
+                    const tiempo = (finTiempo - inicioTiempo) / 1000;
+                    const nombre = prompt('¡Felicidades! Has adivinado la palabra. Ingresa tu nombre para el ranking:');
+
+                    ranking.push({ nombre, tiempo });
+                    localStorage.setItem('ranking', JSON.stringify(ranking));
+
+                    alert(`¡Excelente! Has adivinado la palabra '${palabraSecreta}' en ${intentos} intentos y ${tiempo.toFixed(2)} segundos.`);
+                    volverInicio();
+                }
+            } else {
+                intentos++;
+                dibujarAhorcado();
+                document.getElementById('intentos').textContent = `Intentos restantes: ${intentos}`;
+
+                // Dibujar la parte correspondiente del muñeco
+                if (intentos <= partesMuñeco.length) {
+                    document.getElementById('muñeco').innerHTML += partesMuñeco[intentos - 1];
+                }
+
+                if (intentos >= intentosMaximos) {
+                    alert(`Has alcanzado el límite de intentos (${intentosMaximos}). La palabra correcta era: ${palabraSecreta}`);
+                    terminarJuego();
+                }
+            }
+
+            document.getElementById('palabra').textContent = palabraAdivinada.join(' ');
+            letraInput.value = '';
+        }
+
+        let palabraSecreta;
+        let palabraAdivinada;
+        let intentos = 0;
+        let inicioTiempo;
+        let finTiempo;
+        let ranking = JSON.parse(localStorage.getItem('ranking')) || [];
+
+        function mostrarRanking() {
+            // Ordenar el ranking por tiempo
+            ranking.sort((a, b) => a.tiempo - b.tiempo);
+
+            const listaRanking = document.getElementById('listaRanking');
+            listaRanking.innerHTML = '';
+
+            ranking.forEach((jugador, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. ${jugador.nombre}: ${jugador.tiempo} segundos`;
+                listaRanking.appendChild(li);
+            });
+
+            if (palabraSecreta) {
+                const liPalabra = document.createElement('li');
+                liPalabra.textContent = `Palabra: ${palabraSecreta}`;
+                listaRanking.appendChild(liPalabra);
+            }
+
+            document.getElementById('inicio').style.display = 'none';
+            document.getElementById('juego').style.display = 'none';
+            document.getElementById('ranking').style.display = 'block';
+        }
+
+        function volverInicio() {
+            document.getElementById('inicio').style.display = 'block';
+            document.getElementById('juego').style.display = 'none';
+            document.getElementById('ranking').style.display = 'none';
+        }
+
+        function iniciarJuego() {
+            palabraSecreta = obtenerPalabraAleatoria();
+            palabraAdivinada = Array(palabraSecreta.length).fill('_');
+            intentos = 0;
+
+            document.getElementById('palabra').textContent = palabraAdivinada.join(' ');
+            document.getElementById('intentos').textContent = `Intentos restantes: ${intentos}`;
+            document.getElementById('letraInput').value = '';
+
+            inicioTiempo = new Date().getTime();
+
+            document.getElementById('inicio').style.display = 'none';
+            document.getElementById('juego').style.display = 'block';
+            document.getElementById('ranking').style.display = 'none';
+        }
+
+        function adivinarLetra() {
+            const letraInput = document.getElementById('letraInput');
+            const letra = letraInput.value.toLowerCase();
+
+            if (!letra.match(/[a-z]/)) {
+                alert('Ingresa una letra válida.');
+                return;
+            }
+
+            if (palabraSecreta.includes(letra)) {
+                for (let i = 0; i < palabraSecreta.length; i++) {
+                    if (palabraSecreta[i] === letra) {
+                        palabraAdivinada[i] = letra;
+                    }
+                }
+
+                if (!palabraAdivinada.includes('_')) {
+                    finTiempo = new Date().getTime();
+                    const tiempo = (finTiempo - inicioTiempo) / 1000; // Convertir a segundos
+                    const nombre = prompt('¡Felicidades! Has adivinado la palabra. Ingresa tu nombre para el ranking:');
+                    
+                    ranking.push({ nombre, tiempo });
+                    localStorage.setItem('ranking', JSON.stringify(ranking));
+
+                    alert(`¡Excelente! Has adivinado la palabra '${palabraSecreta}' en ${intentos} intentos y ${tiempo.toFixed(2)} segundos.`);
+                    borrarAhorcado();
+                    volverInicio();
+                }
+            } else {
+                intentos++;
+                dibujarAhorcado();
+                document.getElementById('intentos').textContent = `Intentos restantes: ${intentos}`;
+            }
+
+            document.getElementById('palabra').textContent = palabraAdivinada.join(' ');
+            letraInput.value = '';
+        }
+
+        function terminarJuego() {
+            alert(`La palabra secreta era: ${palabraSecreta}`);
+            borrarAhorcado();
+            volverInicio();
+        }
+
+        function obtenerPalabraAleatoria() {
+            const palabras = ['python', 'programacion', 'desarrollo', 'inteligencia', 'artificial'];
+            return palabras[Math.floor(Math.random() * palabras.length)];
+        }
+    </script>
+</body>
+</html>
