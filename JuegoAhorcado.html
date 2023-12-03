@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Ahorcado</title>
+    <link rel="stylesheet" href="Estilo.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -17,18 +18,6 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-        }
-
-        #contenedor {
-            background: rgba(96, 96, 96, 0.2);
-            border-radius: 25px;
-            backdrop-filter: blur(9px);
-            justify-content: center;
-            align-items: center;
-            align-content: center;
-            margin-top: 40px;
-            text-align: center;
-            line-height: 50px;
         }
 
         h1, h2 {
@@ -127,15 +116,15 @@
     <div id="contenedor">
         <div id="inicio">
             <h1>Bienvenido al Juego de Ahorcado</h1>
-            <button onclick="iniciarJuego()">Jugar</button>
-            <button onclick="mostrarRanking()">Ver Ranking</button>
+            <button id="iniciarJuego" onclick="iniciarJuego()">Jugar</button>
+            <button id="mostrarRanking" onclick="mostrarRanking()">Ver Ranking</button>
         </div>
 
         <div id="juego" style="display: none;">
             <h2 id="palabra"></h2>
             <p id="intentos"></p>
             <input type="text" id="letraInput" maxlength="1" oninput="adivinarLetra()">
-            <button onclick="terminarJuego()">Terminar Juego</button>
+            <button id="BotonterminarJuego" onclick="terminarJuego()">Terminar Juego</button>
         </div>
 
         <div id="ranking" style="display: none;">
@@ -152,7 +141,7 @@
             <h2 id="palabra"></h2>
             <p id="intentos"></p>
             <input type="text" id="letraInput" maxlength="1" oninput="adivinarLetra()">
-            <button onclick="terminarJuego()">Terminar Juego</button>
+            <button id="BotonterminarJuego" onclick="terminarJuego()">Terminar Juego</button>
         </div>
     </div>
 
@@ -352,7 +341,15 @@
         }
 
         function obtenerPalabraAleatoria() {
-            const palabras = ['python', 'programacion', 'desarrollo', 'inteligencia', 'artificial'];
+            const palabras = ['algoritmo', 'lenguaje', 'codigo', 'compilador', 'depuracion', 'iteracion',
+             'recursividad', 'variable', 'funcion', 'baseDeDatos', 'API', 'frontend', 'backend', 'framework', 
+             'script', 'git', 'controlDeVersiones', 'ciberseguridad', 'HTML', 'CSS', 'JavaScript', 'NodeJS', 
+             'React', 'Angular', 'Vue', 'Java', 'CSharp', 'Python', 'Ruby', 'PHP', 'Swift', 'Android', 'iOS', 
+             'debug', 'APIREST', 'inteligenciaArtificial', 'machineLearning', 'cloudComputing', 'docker', 'devOps', 
+             'agile', 'SCRUM', 'bug', 'stackOverflow', 'protocolo', 'SSL', 'UIUX', 'compilacion', 'servidor', 'cliente', 
+             'dominio', 'DNS', 'SQL', 'NoSQL', 'redNeuronal', 'fullStack', 'responsiveDesign', 'bugfix', 'debugging', 
+             'APIKey', 'errorDeSintaxis', 'libreria', 'herencia', 'polimorfismo', 'encapsulamiento', 'abstraccion', 
+             'agregacion', 'composicion'];
             return palabras[Math.floor(Math.random() * palabras.length)];
         }
     </script>

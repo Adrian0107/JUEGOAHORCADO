@@ -1,0 +1,72 @@
+#letraInput {
+    position: absolute; 
+    top: 80px; 
+    left: 108px; 
+    padding: 8px; 
+    font-size: 16px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    margin-bottom: 10px; 
+  }
+  
+  #BotonterminarJuego {
+    position: absolute;
+    top: 150px;
+    left:193px;
+    padding: 10px 20px; /* Añade más relleno para un aspecto llamativo */
+    font-size: 18px;
+    background-color: #ff6347; /* Un tono de rojo */
+    color: #fff; /* Texto en color blanco */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  #BotonterminarJuego:hover {
+    background-color: #cc4731; /* Cambia el color de fondo al pasar el ratón */
+  }
+
+  #contenedor {
+    background: rgba(96, 96, 96, 0.2);
+    border-radius: 25px;
+    backdrop-filter: blur(9px);
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin-top: 10px;
+    text-align: center;
+    line-height: 50px;
+
+    /* Tamaño fijo */
+    width: 430px; /* Puedes ajustar el ancho según tus necesidades */
+    height: 280px; /* Puedes ajustar la altura según tus necesidades */
+  }
+  
+  #iniciarJuego,
+  #mostrarRanking {
+    position: relative;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4787ff56;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 10px; /* Ajustado el margen */
+  }
+  
+  
+  #iniciarJuego {
+    margin-right:60px; /* Ajusta el margen derecho para mover "Jugar" más a la izquierda */
+  }
+
+  #mostrarRanking {
+    margin-right: -100px; /* Ajusta el margen derecho para mover "Jugar" más a la izquierda */
+  }
+  
+  #mostrarRanking:hover,
+  #iniciarJuego:hover {
+    background-color: #4be62c75;
+  }
+  
+  
