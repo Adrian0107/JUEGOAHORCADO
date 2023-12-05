@@ -102,9 +102,10 @@
             border: 3px solid #000;
             margin-top: 20px;
             box-shadow: 5px 5px 10px;
-            background-image: url('https://img.freepik.com/foto-gratis/textura-papel-blanco_1194-2324.jpg');
-            justify-content: center;
-            align-items: center;
+            background-image: url('https://media.istockphoto.com/id/474709291/es/vector/old-western-town.jpg?s=612x612&w=0&k=20&c=HlJ7P4rgbA9YUpBrexRbQw1ZJ__TnTZeEhbTMdg2Z9M=');
+            background-repeat: no-repeat;
+            background-size: cover; /* Ajusta según tus necesidades */
+            background-position: center center; /* Ajusta según tus necesidades */
         }
         
     </style>
@@ -143,6 +144,7 @@
             <input type="text" id="letraInput" maxlength="1" oninput="adivinarLetra()">
             <button id="BotonterminarJuego" onclick="terminarJuego()">Terminar Juego</button>
         </div>
+        
     </div>
 
     <script>
@@ -153,39 +155,68 @@
         let intentosMaximos = 6; // Establecer el límite de intentos
 
         function dibujarAhorcado() {
-            // Dibuja el ahorcado según el número de intentos
-            // Puedes personalizar el diseño según tus preferencias
-            // Aquí se presenta un diseño básico
-            ctx.beginPath();
-            if (intentosMaximos >= 1) {
-              ctx.arc(50, 50, 20, 0, Math.PI * 2); // Cabeza
-            }
-            if (intentos >= 2) {
-              ctx.moveTo(50, 70);
-              ctx.lineTo(50, 150); // Cuerpo
-            }
-            if (intentos >= 3) {
-              ctx.moveTo(30, 90);
-              ctx.lineTo(50, 70); // Brazo izquierdo
-            }
-            if (intentos >= 4) {
-              ctx.moveTo(70, 90);
-              ctx.lineTo(50, 70); // Brazo derecho
-            }
-            if (intentos >= 5) {
-              ctx.moveTo(50, 150);
-              ctx.lineTo(60, 200); // Pierna derecha
-            }
-            if (intentos >= 6) {
-              ctx.moveTo(50, 150);
-              ctx.lineTo(40, 200); // Pierna izquierda
-            }
-            ctx.stroke();
+    // Dibuja el ahorcado según el número de intentos
+    // Puedes personalizar el diseño según tus preferencias
+    // Aquí se presenta un diseño más elaborado
 
-            if (intentos >= intentosMaximos) {
-                terminarJuego();
-              }
-          }
+    // Configuración de estilo
+    ctx.strokeStyle = "#045"; // Color de las líneas
+    ctx.lineWidth = 8; // Grosor de las líneas
+
+    // Ajuste para mover el ahorcado a la derecha
+    const xOffset = 150;
+
+    // Dibuja el cuerpo del ahorcado
+    ctx.beginPath();
+    if (intentosMaximos >= 1) {
+        ctx.arc(50 + xOffset, 50, 20, 0, Math.PI * 2); // Cabeza
+    }
+    if (intentos >= 2) {
+        ctx.moveTo(50 + xOffset, 70);
+        ctx.lineTo(50 + xOffset, 120); // Cuerpo
+    }
+    if (intentos >= 3) {
+        ctx.moveTo(50 + xOffset, 85);
+        ctx.lineTo(30 + xOffset, 105); // Brazo izquierdo
+    }
+    if (intentos >= 4) {
+        ctx.moveTo(50 + xOffset, 85);
+        ctx.lineTo(70 + xOffset, 105); // Brazo derecho
+    }
+    if (intentos >= 5) {
+        ctx.moveTo(50 + xOffset, 120);
+        ctx.lineTo(65 + xOffset, 140); // Pierna derecha
+    }
+    if (intentos >= 6) {
+        ctx.moveTo(50 + xOffset, 120);
+        ctx.lineTo(35 + xOffset, 140); // Pierna izquierda
+    }
+    ctx.stroke();
+
+    // Dibuja la cara del ahorcado
+    if (intentosMaximos >= 1) {
+        ctx.beginPath();
+        ctx.arc(50 + xOffset, 50, 10, 0, Math.PI); // Ojo izquierdo
+        ctx.moveTo(50 + xOffset, 50);
+        ctx.arc(50 + xOffset, 50, 10, Math.PI, Math.PI * 2, true); // Ojo derecho (en sentido contrario a las agujas del reloj)
+        ctx.moveTo(45 + xOffset, 55);
+        ctx.arc(45 + xOffset, 55, 2, 0, Math.PI * 2); // Pupila izquierda
+        ctx.moveTo(55 + xOffset, 55);
+        ctx.arc(55 + xOffset, 55, 2, 0, Math.PI * 2); // Pupila derecha
+        ctx.stroke();
+    }
+
+    if (intentos >= intentosMaximos) {
+        // Dibuja la última pierna izquierda
+        ctx.beginPath();
+        ctx.moveTo(50 + xOffset, 120);
+        ctx.lineTo(30 + xOffset, 150); // Ajusta la posición de la pierna izquierda
+        ctx.stroke();
+
+        terminarJuego();
+    }
+}
+
       
         function borrarAhorcado() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -220,7 +251,7 @@
                     ranking.push({ nombre, tiempo });
                     localStorage.setItem('ranking', JSON.stringify(ranking));
 
-                    alert(`¡Excelente! Has adivinado la palabra '${palabraSecreta}' en ${intentos} intentos y ${tiempo.toFixed(2)} segundos.`);
+                    alert(`¡Excelente! Has adivinado la palabra '${palabraSecreta}' en ${intentos + 1} intentos y ${tiempo.toFixed(2)} segundos.`);
                     volverInicio();
                 }
             } else {
@@ -320,7 +351,7 @@
                     ranking.push({ nombre, tiempo });
                     localStorage.setItem('ranking', JSON.stringify(ranking));
 
-                    alert(`¡Excelente! Has adivinado la palabra '${palabraSecreta}' en ${intentos} intentos y ${tiempo.toFixed(2)} segundos.`);
+                    alert(`¡Excelente! Has adivinado la palabra '${palabraSecreta}' en ${intentos + 1} intentos y ${tiempo.toFixed(2)} segundos.`);
                     borrarAhorcado();
                     volverInicio();
                 }
@@ -335,23 +366,30 @@
         }
 
         function terminarJuego() {
-            alert(`La palabra secreta era: ${palabraSecreta}`);
+            alert(`¡Oh no! Has perdido. La palabra secreta era: ${palabraSecreta}`);
             borrarAhorcado();
             volverInicio();
         }
 
+        
+
         function obtenerPalabraAleatoria() {
+           
+
             const palabras = ['algoritmo', 'lenguaje', 'codigo', 'compilador', 'depuracion', 'iteracion',
-             'recursividad', 'variable', 'funcion', 'baseDeDatos', 'API', 'frontend', 'backend', 'framework', 
-             'script', 'git', 'controlDeVersiones', 'ciberseguridad', 'HTML', 'CSS', 'JavaScript', 'NodeJS', 
-             'React', 'Angular', 'Vue', 'Java', 'CSharp', 'Python', 'Ruby', 'PHP', 'Swift', 'Android', 'iOS', 
-             'debug', 'APIREST', 'inteligenciaArtificial', 'machineLearning', 'cloudComputing', 'docker', 'devOps', 
-             'agile', 'SCRUM', 'bug', 'stackOverflow', 'protocolo', 'SSL', 'UIUX', 'compilacion', 'servidor', 'cliente', 
-             'dominio', 'DNS', 'SQL', 'NoSQL', 'redNeuronal', 'fullStack', 'responsiveDesign', 'bugfix', 'debugging', 
-             'APIKey', 'errorDeSintaxis', 'libreria', 'herencia', 'polimorfismo', 'encapsulamiento', 'abstraccion', 
+             'recursividad', 'variable', 'funcion', 'basededatos', 'api', 'frontend', 'backend', 'framework', 
+             'script', 'git', 'ciberseguridad', 'html', 'css', 'javascript', 'nodejs', 
+             'Angular', 'Java', 'csharp', 'python', 'ruby', 'php', 'swift', 'android', 'ios', 
+             'inteligencia', 'artificial',
+             'bug', 'stackOverflow', 'protocolo', 'compilacion', 'servidor', 'cliente', 
+             'dominio', 'dns', 'sql', 'redneuronal',  
+             'libreria', 'herencia', 'polimorfismo', 'encapsulamiento', 'abstraccion', 
              'agregacion', 'composicion'];
             return palabras[Math.floor(Math.random() * palabras.length)];
         }
+
+        
     </script>
+    
 </body>
 </html>
